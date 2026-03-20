@@ -232,7 +232,7 @@ RAZORPAY_KEY_SECRET=your_secret
 
 ## 🤝 Team
 
-Built with ❤️ for India's gig workers at **[Hackathon Name]**
+Built with ❤️ for India's gig workers at **GUIDEWARE DEV TRIALS HACKATHON**
 
 ---
 
