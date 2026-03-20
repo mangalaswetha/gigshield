@@ -3,6 +3,11 @@
 
 > **Parametric Income Protection Insurance for India's 15 Million Gig Workers**
 
+[![Java](https://img.shields.io/badge/Java-Spring%20Boot-orange?style=for-the-badge&logo=java)](https://spring.io/projects/spring-boot)
+[![React](https://img.shields.io/badge/Frontend-React%20PWA-blue?style=for-the-badge&logo=react)](https://reactjs.org/)
+[![AWS](https://img.shields.io/badge/Cloud-AWS-yellow?style=for-the-badge&logo=amazonaws)](https://aws.amazon.com/)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+
 ---
 
 ## 🚨 The Problem
@@ -11,22 +16,26 @@ In India's gig economy, a delivery partner's **income is tied to being on the ro
 
 When a Zomato server crashes at peak hour, or a Blinkit zone is blocked by a local rally — the worker loses **30% of their daily wage** with zero recourse.
 
-Existing insurance covers:
-- ✅ Accidents
-- ✅ Health emergencies
-- ✅ Vehicle damage
+**GigShield covers one thing and one thing only:**
+> ✅ **Income lost because an external, uncontrollable event stopped you from working.**
 
-But **nothing** protects the **"empty pocket"** caused by external, uncontrollable disruptions.
+**GigShield does NOT cover — ever, under any circumstance:**
+> ❌ Accidents or injuries
+> ❌ Medical bills or hospitalisation
+> ❌ Vehicle damage or repair
+> ❌ Life insurance or death benefits
+> ❌ Personal disputes or individual mechanical failures
+> ❌ Anything caused by the worker's own actions
 
-> GigShield was built to protect the **working hour** — not just the person or the vehicle.
+> *If the disruption is yours alone — it is not our trigger. If the disruption shut down your entire zone — that is exactly what we exist for.*
 
 ---
 
 ## 💡 What is GigShield?
 
-**GigShield** is a **parametric insurance platform** that triggers automatic income-loss payouts when external, verifiable events disrupt a gig worker's ability to earn.
+**GigShield** is a **parametric income insurance platform** that pays out automatically when a verified, external, zone-level event — heavy rain, app server crash, rally, extreme heat — stops an entire community of workers from earning.
 
-No paperwork. No waiting. **Data triggers the payment.**
+No paperwork. No waiting. **The external event triggers the payment.**
 
 ---
 
@@ -35,29 +44,32 @@ No paperwork. No waiting. **Data triggers the payment.**
 ### 🔐 Verification-First Login
 Workers log in via **OAuth** using their existing delivery partner credentials (Zomato / Swiggy / Amazon) to verify their active partner status. No fake accounts.
 
-### 📜 The Smart Contract Disclaimer
-Upon every login, users accept a legally-binding Smart Contract:
-> *"This platform covers ONLY income loss from external disruptions. It strictly excludes medical bills, life insurance, accident coverage, and vehicle repairs."*
+### 📜 The Non-Negotiable Smart Contract
+Upon registration, users sign an **immutable on-chain smart contract** (Solidity + IPFS):
+
+> *"GigShield pays ONLY when a verified external event — weather, platform outage, or civic disruption — prevents zone-level work. It will never pay for accidents, health, vehicle, or any personal incident. This cannot be changed after signing."*
+
+This is signed once. Stored on Ethereum. No exceptions, no amendments.
 
 ### 💳 Weekly Subscription Tiers
 
 | Tier | Weekly Cost | Coverage Level |
 |------|------------|----------------|
-| 🌱 Eco | ₹49 / week | Basic coverage |
-| ⭐ Standard | ₹99 / week | Enhanced coverage |
-| 👑 Elite | ₹199 / week | Maximum coverage |
+| 🌱 Eco | ₹49 / week | Basic |
+| ⭐ Standard | ₹99 / week | Enhanced |
+| 👑 Elite | ₹199 / week | Maximum |
 
-*Protection that costs less than a few cups of chai per week.*
+*Less than a few cups of chai. Matched to weekly payout cycles.*
 
-### ⚡ Automatic Parametric Triggers
+### ⚡ What Triggers a Payout
 
-| Event | Trigger Condition |
-|-------|------------------|
-| 🌡️ Extreme Heat | Temperature > 42°C sustained |
+| External Event | Trigger Condition |
+|----------------|------------------|
+| 🌡️ Extreme Heat | Temperature > 42°C sustained in zone |
 | 🌧️ Heavy Rain | IMD red/orange alert active in zone |
-| 📱 App Server Crash | Delivery platform down for community |
-| 🚧 Rally / Strike | Verified by R.A.V.E. Engine |
-| 🌉 Rare Events | Human-verified Special Request Portal |
+| 📱 App Server Crash | Delivery platform down — community-wide |
+| 🚧 Rally / Strike / Bandh | Verified by R.A.V.E. Engine |
+| 🌉 Rare Civic Events | Human-verified Special Request Portal |
 
 ### ⏱️ The 1-Hour Promise
 Verified funds hit the worker's **UPI / IMPS account in under 60 minutes.**
@@ -71,9 +83,9 @@ Worker Active in Zone
         ↓
 External Event Detected (Weather API / App Heartbeat / R.A.V.E.)
         ↓
-Zone-Level Validation (affects GROUP, not just individual)
+Zone-Level Validation → must affect the GROUP, not one individual
         ↓
-GPS Cross-Reference → Fraud Check (no ghosting)
+Behavioral Integrity Score → Fraud & Spoofing Check
         ↓
 Parametric Payout Calculated (based on disruption duration)
         ↓
@@ -113,7 +125,7 @@ UPI Transfer Initiated ⚡ < 60 Minutes
 
 ### Security & Smart Contracts
 - **OAuth 2.0 + JWT** — Delivery partner authentication
-- **Solidity + Web3j** — Immutable smart contract disclaimer on Ethereum
+- **Solidity + Web3j** — Immutable smart contract on Ethereum
 - **IPFS** — Decentralized disclaimer hash storage
 
 ### Infrastructure
@@ -131,108 +143,82 @@ UPI Transfer Initiated ⚡ < 60 Minutes
 
 ## 🛡️ R.A.V.E. — Rally & Anomaly Verification Engine
 
-Our proprietary verification system for non-weather disruptions:
+Our proprietary verification system for non-weather external disruptions:
 
-1. Worker submits disruption claim from affected zone
-2. AI scans **Google News API** for local event keywords
+1. Worker reports disruption from affected zone
+2. AI scans **Google News API** for zone-specific event keywords
 3. Cross-references **Twitter/X local trends** in real-time
-4. Applies **Consensus Model** — multiple API sources must agree
+4. Applies **Consensus Model** — multiple sources must agree
 5. **Zone-level validation** — must affect a group, not an individual
-6. GPS cross-reference checks worker is actually in the disrupted zone
-7. ✅ Payout triggered or ❌ Claim flagged for human review
+6. GPS cross-reference confirms worker is inside the disrupted zone
+7. ✅ Payout triggered or ❌ Claim sent to human review
 
 ---
 
 ## 🚫 Fraud Prevention: Anti-Ghosting System
 
-**"Ghosting"** = A rider claims a loss in Zone A but drives to Zone B to work.
+**"Ghosting"** = Claiming a zone disruption while secretly working in another zone.
 
 GigShield prevents this by:
-- Real-time **GPS tracking** cross-referenced with delivery platform's **Active Service status**
-- **Geofencing** via Google Maps — payout only if worker stays in disrupted zone
+- Real-time **GPS tracking** cross-referenced with the platform's **Active Service status**
+- **Geofencing** via Google Maps — payout only valid inside the disrupted zone
 - Apache Flink **stream processing** detects anomalous movement patterns instantly
 
 ---
 
 ## 🔐 Adversarial Defense & Anti-Spoofing Strategy
 
-> **Threat Identified:** A coordinated syndicate of 500+ delivery workers used GPS-spoofing apps via Telegram groups to fake zone presence during red-alert weather events — draining a competitor's liquidity pool within hours.
+> **Threat:** A coordinated syndicate of 500 delivery workers used GPS-spoofing apps — organized via Telegram — to fake zone presence during red-alert weather, draining a competitor's liquidity pool within hours.
 >
-> **Our Response: Simple GPS verification is dead. We never relied on it alone.**
+> **Our answer: We never trusted GPS alone.**
 
-### 1. The Differentiation — Genuine Stranded Worker vs. Bad Actor
+### 1. Differentiating a Genuine Stranded Worker from a Bad Actor
 
-A real worker caught in a storm looks very different from someone spoofing from home. Our **Behavioral Integrity Score (BIS)** model compares 6 signals in real-time:
+Our **Behavioral Integrity Score (BIS)** compares 6 passive device signals in real-time:
 
 | Signal | Genuine Worker | GPS Spoofer |
 |--------|---------------|-------------|
-| **Accelerometer / Gyroscope** | Vibration patterns of a stationary bike in rain | Perfectly flat — phone is resting at home |
-| **Battery Drain Rate** | High — screen on, GPS active, rain = poor signal = more battery use | Normal/low — device idle |
-| **Network Tower ID (Cell ID)** | Matches the claimed zone's cell towers | Mismatches — home tower reported |
-| **Platform Active Status** | Zomato/Swiggy shows "Online, 0 orders" — consistent with zone lockdown | Platform shows "Offline" — rider never logged in |
-| **Historical Zone Pattern** | Worker has delivered in this zone 3+ times this week | First appearance in this zone ever |
-| **Claim Timing vs. Alert Timing** | Claim arrives 8–15 mins after IMD alert — natural lag | Claim arrives within 60 seconds of alert — bot-like speed |
+| **Accelerometer / Gyroscope** | Vibration of a stationary bike in rain | Perfectly flat — phone resting at home |
+| **Battery Drain Rate** | High — GPS active, poor signal in storm | Normal — device idle |
+| **Network Cell Tower ID** | Matches claimed zone's towers | Mismatches — home tower reported |
+| **Platform Active Status** | "Online, 0 orders" — zone lockdown | "Offline" — never logged into app |
+| **Historical Zone Pattern** | Delivered in this zone 3+ times this week | First appearance in this zone ever |
+| **Claim Timing vs. Alert Timing** | Claim arrives 8–15 min after IMD alert | Claim arrives within 60 seconds — bot speed |
 
-The BIS produces a **trust score (0–100).** Score > 70 → auto-payout. Score 40–70 → soft hold. Score < 40 → flagged for review.
+BIS produces a **trust score (0–100):** Score >70 → auto-payout. Score 40–70 → soft hold. Score <40 → flagged.
 
----
+### 2. Detecting a Coordinated Fraud Ring
 
-### 2. The Data — Detecting a Coordinated Fraud Ring
+500 people spoofing simultaneously leaves a statistical fingerprint. Our **Ring Detection Engine** (Flink + Deeplearning4j) watches for:
 
-Individual spoofing is hard. **500 people spoofing at once leaves a statistical fingerprint.**
+- **Claim Burst Anomaly** — >15% of zone subscribers filing within 3 minutes = Surge Scrutiny Mode. Real disasters create staggered claims. Coordinated fraud creates synchronized spikes.
+- **Telegram / Social Signal Cross-Reference** — R.A.V.E. scans for public group chatter matching zone + timing. Fraud coordination language triggers an immediate zone flag.
+- **Device Fingerprint Clustering** — 30+ claims sharing the same spoofing app fingerprint = cluster quarantine.
+- **Cell Tower Homogeneity** — Real workers in a storm hit different towers across a zone. A fraud ring from one neighbourhood hits 2–3 towers. Flink detects this instantly.
+- **UPI Recipient Graph Analysis** — Post-payout, flagged accounts routing money to the same UPI handles within minutes are logged and escalated to the insurance pool auditor.
 
-Our **Ring Detection Engine** (Apache Flink + Deeplearning4j) watches for:
-
-- **Claim Burst Anomaly** — If >15% of a zone's subscribers file within a 3-minute window, the system enters **Surge Scrutiny Mode.** Real disasters create staggered claims; coordinated fraud creates synchronized spikes.
-
-- **Telegram / Social Signal Cross-Reference** — R.A.V.E. Engine scans for localized Telegram public group activity and Twitter/X keywords matching the zone + timing. If chatter about "GigShield payout trick" appears simultaneously with a claim surge, the zone is flagged immediately.
-
-- **Device Fingerprint Clustering** — Each PWA session generates a device fingerprint (screen resolution, OS build, browser agent, touch patterns). If 30+ claims share suspiciously similar fingerprints — indicating the same spoofing app — the cluster is quarantined.
-
-- **Network Homogeneity Check** — Real workers in a storm connect from different towers across a zone. A fraud ring operating from one neighborhood hits the same 2–3 cell towers. Flink detects this geographic clustering and raises a ring-level alert.
-
-- **UPI Recipient Graph Analysis** — Post-payout, if flagged accounts route money to the same UPI handles or wallets within minutes, the pattern is logged and reported to the insurance pool auditor.
-
----
-
-### 3. The UX Balance — Never Punishing the Honest Worker
-
-> The worst outcome is not fraud. The worst outcome is Ravi — genuinely stranded in a Chennai downpour — getting his payout blocked because the system was too aggressive.
-
-Our **Tiered Response Protocol** ensures innocent workers are never left behind:
+### 3. UX Balance — Never Punishing the Honest Worker
 
 ```
-BIS Score > 70  →  ✅ Auto-Payout. No friction. < 60 minutes.
-                        ↓
-BIS Score 40–70 →  ⏳ Soft Hold (max 90 minutes).
-                   One passive verification step:
-                   "Tap to confirm you're still in your zone."
-                   No documents. No calls. One tap.
-                        ↓
-BIS Score < 40  →  🔍 Human Review Queue (max 4 hours).
-                   Worker receives: "Your claim is being verified.
-                   You will receive your payout or explanation
-                   within 4 hours." No silence. No black box.
-                        ↓
-Ring-Level Flag →  🚨 Zone Quarantine.
-                   All claims from zone paused.
-                   Human investigator assigned.
-                   Innocent workers in quarantined zone
-                   receive automatic 24hr subscription extension
-                   as compensation for the delay.
+BIS Score > 70   →  ✅ Auto-Payout. No friction. < 60 minutes.
+
+BIS Score 40–70  →  ⏳ Soft Hold (max 90 min).
+                    One passive check: "Tap to confirm you're still in your zone."
+                    No documents. No calls. One tap.
+
+BIS Score < 40   →  🔍 Human Review (max 4 hours).
+                    Worker notified: "Your claim is being verified.
+                    You'll hear back within 4 hours." No silence.
+
+Ring-Level Flag  →  🚨 Zone Quarantine.
+                    All zone claims paused. Investigator assigned.
+                    Innocent workers receive automatic 24hr
+                    subscription extension as compensation.
 ```
 
-**Key Principle:** A flagged claim is never silently rejected. Every worker gets a status update in their language (Tamil / Hindi / English) via the PWA notification within 10 minutes of any hold.
+**Network Drop Protection:** If a genuine worker loses GPS signal mid-event (common in heavy rain), their last verified zone location is held for **30 minutes** before any re-verification is needed.
 
-**Network Drop Protection:** If a genuine worker loses GPS signal mid-event (common in heavy rain), the last verified zone location is held for **30 minutes** before any re-verification is required. This prevents innocent signal drops from triggering false fraud flags.
-
-> The syndicate gets caught. Ravi gets paid. That is the only acceptable outcome.
-
----
-
-## 📱 Screenshots
-
-> *Coming soon — UI in active development*
+> *The syndicate gets caught. Ravi gets paid. That is the only acceptable outcome.*
 
 ---
 
@@ -290,7 +276,7 @@ RAZORPAY_KEY_SECRET=your_secret
 
 ## 🏆 Key Achievements
 
-- **Trigger-Not-Claim Logic** — Data triggers payment, not paperwork
+- **Trigger-Not-Claim Logic** — External event triggers payment, not paperwork
 - **Sub-60-Minute Liquidity** — Fastest income payout in Indian insurtech
 - **₹49/week Affordability** — Protection cheaper than a cup of chai
 - **Zone-Level Validation** — Industry-first group-event verification system
@@ -310,9 +296,11 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 
 ---
 
-## ⚠️ Important Disclaimer
+## ⚠️ THIS PLATFORM COVERS EXTERNAL INCOME LOSS ONLY
 
-GigShield is **strictly** an Income Loss Protection platform. It does **NOT** cover medical bills, life insurance, accident coverage, or vehicle repairs. All users must accept the Smart Contract terms upon registration.
+> GigShield pays **only** when a verified, external, zone-level event stops you from working.
+> It will **never** cover accidents, injuries, medical bills, vehicle damage, life insurance, or any personal incident — no matter the circumstance.
+> This is not negotiable. It is written into an immutable smart contract signed at registration.
 
 ---
 
