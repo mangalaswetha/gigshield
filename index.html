@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GigShield India — Income Protection for Gig Workers</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --orange:#E8520A;--orange-light:#FFF0E8;--dark:#1A1208;--mid:#4A3728;
+    --surface:#FAFAF8;--border:#E8E0D5;--success:#0F6E56;--success-bg:#E1F5EE;
+    --warn:#BA7517;--warn-bg:#FAEEDA;--danger:#A32D2D;--danger-bg:#FCEBEB;
+    --text:#1A1208;--muted:#6B5B4E;
+  }
+  body{font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--text);min-height:100vh}
+  h1,h2,h3{font-family:'Syne',sans-serif}
+
+  /* NAV */
+  .nav{background:var(--dark);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+  .nav-brand{color:#fff;font-family:'Syne',sans-serif;font-size:18px;font-weight:700;display:flex;align-items:center;gap:8px}
+  .shield-icon{width:28px;height:28px;background:var(--orange);border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;display:flex;align-items:center;justify-content:center;font-size:14px}
+  .nav-tabs{display:flex;gap:4px}
+  .tab{background:none;border:none;color:rgba(255,255,255,0.5);padding:6px 12px;border-radius:6px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;transition:all .2s}
+  .tab.active,.tab:hover{background:rgba(255,255,255,0.1);color:#fff}
+  .tab.active{background:var(--orange);color:#fff}
+
+  /* PAGES */
+  .page{display:none;padding:24px 20px;max-width:900px;margin:0 auto}
+  .page.active{display:block}
+
+  /* CARDS */
+  .card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:16px}
+  .card-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:600;margin-bottom:4px}
+  .card-sub{font-size:13px;color:var(--muted);margin-bottom:16px}
+
+  /* FORM */
+  label{font-size:13px;font-weight:500;color:var(--muted);display:block;margin-bottom:4px}
+  input,select{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;background:#fff;color:var(--text);margin-bottom:14px}
+  input:focus,select:focus{outline:2px solid var(--orange);border-color:transparent}
+  .btn{background:var(--orange);color:#fff;border:none;padding:12px 24px;border-radius:8px;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;width:100%;transition:opacity .2s}
+  .btn:hover{opacity:.88}
+  .btn-outline{background:#fff;color:var(--orange);border:1.5px solid var(--orange)}
+  .btn-sm{padding:7px 16px;width:auto;font-size:13px}
+
+  /* TIER CARDS */
+  .tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+  .tier{border:2px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all .2s;text-align:center}
+  .tier:hover{border-color:var(--orange)}
+  .tier.selected{border-color:var(--orange);background:var(--orange-light)}
+  .tier-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:600}
+  .tier-price{font-size:22px;font-weight:700;color:var(--orange);margin:6px 0}
+  .tier-sub{font-size:11px;color:var(--muted)}
+
+  /* PREMIUM */
+  .factor-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+  .factor-badge{padding:3px 10px;border-radius:20px;font-size:12px;font-weight:500}
+  .badge-good{background:var(--success-bg);color:var(--success)}
+  .badge-warn{background:var(--warn-bg);color:var(--warn)}
+  .badge-bad{background:var(--danger-bg);color:var(--danger)}
+
+  /* TRIGGERS */
+  .trigger-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+  .trigger-card{border:1px solid var(--border);border-radius:12px;padding:16px}
+  .trigger-card.triggered{border-color:var(--success);background:var(--success-bg)}
+  .trigger-icon{font-size:24px;margin-bottom:8px}
+  .trigger-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:600;margin-bottom:4px}
+  .trigger-status{font-size:12px;font-weight:500;padding:3px 10px;border-radius:20px;display:inline-block;margin-top:6px}
+  .status-watching{background:#E6F1FB;color:#185FA5}
+  .status-triggered{background:var(--success-bg);color:var(--success)}
+  .status-clear{background:#F1EFE8;color:#5F5E5A}
+  .pulse{width:8px;height:8px;border-radius:50%;background:var(--orange);display:inline-block;margin-right:6px;animation:pulse 1.2s infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(0.8)}}
+
+  /* CLAIMS */
+  .claim-card{border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+  .claim-title{font-weight:500;font-size:14px}
+  .claim-meta{font-size:12px;color:var(--muted);margin-top:3px}
+  .claim-amount{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--success);text-align:right}
+  .claim-status{font-size:11px;margin-top:3px;text-align:right}
+
+  /* POLICY CARD */
+  .policy-active{background:var(--dark);border-radius:16px;padding:24px;color:#fff;margin-bottom:16px}
+  .policy-name{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:4px}
+  .policy-id{font-size:12px;opacity:.5;font-family:monospace}
+  .policy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
+  .policy-stat{background:rgba(255,255,255,0.08);border-radius:10px;padding:12px}
+  .policy-stat-val{font-family:'Syne',sans-serif;font-size:20px;font-weight:700}
+  .policy-stat-lbl{font-size:11px;opacity:.5;margin-top:2px}
+
+  /* BIS */
+  .bis-bar{height:8px;border-radius:4px;background:var(--border);overflow:hidden;margin:8px 0}
+  .bis-fill{height:100%;border-radius:4px;transition:width .6s}
+
+  /* STEPS */
+  .steps{display:flex;gap:0;margin-bottom:24px}
+  .step{flex:1;text-align:center;position:relative}
+  .step::after{content:'';position:absolute;top:14px;left:50%;width:100%;height:2px;background:var(--border);z-index:0}
+  .step:last-child::after{display:none}
+  .step-dot{width:28px;height:28px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;margin:0 auto 6px;position:relative;z-index:1;transition:all .3s}
+  .step.done .step-dot{background:var(--success);color:#fff}
+  .step.active .step-dot{background:var(--orange);color:#fff}
+  .step-label{font-size:11px;color:var(--muted)}
+
+  /* DISCLAIMER */
+  .disclaimer-box{background:#FFF8F5;border:2px solid var(--orange);border-radius:12px;padding:20px;margin-bottom:16px}
+  .disclaimer-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--orange);margin-bottom:10px}
+  .disclaimer-list{list-style:none;font-size:13px;color:var(--mid)}
+  .disclaimer-list li{padding:4px 0;display:flex;gap:8px}
+
+  /* TOAST */
+  .toast{position:fixed;bottom:24px;right:24px;background:var(--dark);color:#fff;padding:12px 20px;border-radius:10px;font-size:14px;z-index:999;transform:translateY(100px);opacity:0;transition:all .3s}
+  .toast.show{transform:translateY(0);opacity:1}
+
+  @media(max-width:600px){
+    .tiers{grid-template-columns:1fr}
+    .trigger-grid{grid-template-columns:1fr}
+    .policy-grid{grid-template-columns:1fr 1fr}
+    .nav-tabs .tab{font-size:11px;padding:5px 8px}
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand">
+    <div class="shield-icon">🛡</div>
+    GigShield
+  </div>
+  <div class="nav-tabs">
+    <button class="tab active" onclick="showPage('register',this)">Register</button>
+    <button class="tab" onclick="showPage('policy',this)">Policy</button>
+    <button class="tab" onclick="showPage('triggers',this)">Live Triggers</button>
+    <button class="tab" onclick="showPage('claims',this)">Claims</button>
+  </div>
+</nav>
+
+<!-- ===== REGISTRATION ===== -->
+<div id="page-register" class="page active">
+
+  <div id="reg-step1">
+    <div style="margin-bottom:20px">
+      <h2 style="font-size:22px;margin-bottom:4px">Worker Registration</h2>
+      <p style="font-size:13px;color:var(--muted)">Verified via your delivery partner credentials</p>
+    </div>
+    <div class="steps">
+      <div class="step active"><div class="step-dot">1</div><div class="step-label">Identity</div></div>
+      <div class="step"><div class="step-dot">2</div><div class="step-label">Zone</div></div>
+      <div class="step"><div class="step-dot">3</div><div class="step-label">Disclaimer</div></div>
+      <div class="step"><div class="step-dot">4</div><div class="step-label">Plan</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Partner Verification</div>
+      <div class="card-sub">Login with your delivery platform account</div>
+      <label>Full Name</label>
+      <input type="text" id="reg-name" placeholder="e.g. Ravi Kumar"/>
+      <label>Platform</label>
+      <select id="reg-platform">
+        <option>Zomato</option><option>Swiggy</option><option>Amazon Flex</option><option>Blinkit</option>
+      </select>
+      <label>Partner ID</label>
+      <input type="text" id="reg-pid" placeholder="e.g. ZOM-2947183"/>
+      <label>Mobile (UPI linked)</label>
+      <input type="tel" id="reg-phone" placeholder="9XXXXXXXXX"/>
+      <button class="btn" onclick="regStep2()">Verify &amp; Continue →</button>
+    </div>
+  </div>
+
+  <div id="reg-step2" style="display:none">
+    <div class="steps">
+      <div class="step done"><div class="step-dot">✓</div><div class="step-label">Identity</div></div>
+      <div class="step active"><div class="step-dot">2</div><div class="step-label">Zone</div></div>
+      <div class="step"><div class="step-dot">3</div><div class="step-label">Disclaimer</div></div>
+      <div class="step"><div class="step-dot">4</div><div class="step-label">Plan</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Your Working Zone</div>
+      <div class="card-sub">This determines your hyper-local risk score and premium</div>
+      <label>City</label>
+      <select id="reg-city">
+        <option>Chennai</option><option>Mumbai</option><option>Delhi</option><option>Bengaluru</option><option>Hyderabad</option><option>Kolkata</option>
+      </select>
+      <label>Zone / Area</label>
+      <select id="reg-zone" onchange="updateZoneRisk()">
+        <option value="low">Tambaram (Low flood risk)</option>
+        <option value="med">T. Nagar (Medium risk)</option>
+        <option value="high">Velachery (High flood risk)</option>
+        <option value="low2">Anna Nagar (Low risk)</option>
+      </select>
+      <div id="zone-risk-card" style="background:var(--success-bg);border-radius:8px;padding:12px;font-size:13px;color:var(--success);margin-bottom:14px">
+        ✓ Zone risk: <strong>Low</strong> — You qualify for a ₹8/week discount
+      </div>
+      <label>Avg. working hours/day</label>
+      <input type="number" id="reg-hours" value="10" min="4" max="16"/>
+      <button class="btn" onclick="regStep3()">Continue →</button>
+    </div>
+  </div>
+
+  <div id="reg-step3" style="display:none">
+    <div class="steps">
+      <div class="step done"><div class="step-dot">✓</div><div class="step-label">Identity</div></div>
+      <div class="step done"><div class="step-dot">✓</div><div class="step-label">Zone</div></div>
+      <div class="step active"><div class="step-dot">3</div><div class="step-label">Disclaimer</div></div>
+      <div class="step"><div class="step-dot">4</div><div class="step-label">Plan</div></div>
+    </div>
+    <div class="disclaimer-box">
+      <div class="disclaimer-title">⚠ Smart Contract — Read Before You Sign</div>
+      <ul class="disclaimer-list">
+        <li><span style="color:var(--success)">✓</span> Covers ONLY income lost due to verified external zone-level disruptions</li>
+        <li><span style="color:var(--success)">✓</span> Triggers: extreme weather, app server outage, verified rally / bandh</li>
+        <li><span style="color:var(--danger)">✗</span> Does NOT cover accidents, injuries, or medical expenses</li>
+        <li><span style="color:var(--danger)">✗</span> Does NOT cover vehicle damage or repair</li>
+        <li><span style="color:var(--danger)">✗</span> Does NOT cover personal disputes or individual failures</li>
+        <li><span style="color:var(--danger)">✗</span> Does NOT cover anything caused by your own actions</li>
+      </ul>
+      <p style="font-size:11px;color:var(--muted);margin-top:10px">This contract is stored on Ethereum via Web3j + IPFS. It cannot be changed after signing.</p>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;padding:12px;border:1px solid var(--border);border-radius:8px;margin-bottom:16px">
+      <input type="checkbox" id="agree-check" style="width:18px;height:18px;margin:0"/>
+      <label style="margin:0;font-size:13px;cursor:pointer" for="agree-check">I have read and agree to this Smart Contract</label>
+    </div>
+    <button class="btn" onclick="regStep4()">Sign &amp; Continue →</button>
+  </div>
+
+  <div id="reg-step4" style="display:none">
+    <div class="steps">
+      <div class="step done"><div class="step-dot">✓</div><div class="step-label">Identity</div></div>
+      <div class="step done"><div class="step-dot">✓</div><div class="step-label">Zone</div></div>
+      <div class="step done"><div class="step-dot">✓</div><div class="step-label">Disclaimer</div></div>
+      <div class="step active"><div class="step-dot">4</div><div class="step-label">Plan</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Choose Your Shield</div>
+      <div class="card-sub">AI-adjusted pricing based on your zone risk profile</div>
+      <div class="tiers">
+        <div class="tier" onclick="selectTier(this,'eco',49)">
+          <div style="font-size:20px">🌱</div>
+          <div class="tier-name">Eco</div>
+          <div class="tier-price" id="price-eco">₹49</div>
+          <div class="tier-sub">/week · Basic</div>
+        </div>
+        <div class="tier selected" onclick="selectTier(this,'std',99)">
+          <div style="font-size:20px">⭐</div>
+          <div class="tier-name">Standard</div>
+          <div class="tier-price" id="price-std">₹99</div>
+          <div class="tier-sub">/week · Enhanced</div>
+          <div style="font-size:10px;background:var(--orange);color:#fff;border-radius:4px;padding:2px 6px;margin-top:4px;display:inline-block">POPULAR</div>
+        </div>
+        <div class="tier" onclick="selectTier(this,'elite',199)">
+          <div style="font-size:20px">👑</div>
+          <div class="tier-name">Elite</div>
+          <div class="tier-price" id="price-elite">₹199</div>
+          <div class="tier-sub">/week · Maximum</div>
+        </div>
+      </div>
+      <div id="ai-pricing-note" style="background:var(--orange-light);border-radius:8px;padding:12px;font-size:12px;color:var(--mid);margin-bottom:14px">
+        🤖 <strong>AI Pricing Active:</strong> Low flood risk zone saves you ₹8/week. Standard plan: ₹99 → <strong>₹91/week</strong>
+      </div>
+      <button class="btn" onclick="completeReg()">Activate Shield →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== POLICY ===== -->
+<div id="page-policy" class="page">
+  <div class="policy-active">
+    <div class="policy-name" id="pol-name">Ravi Kumar</div>
+    <div class="policy-id" id="pol-id">GS-CHN-2026-004729</div>
+    <div style="margin-top:10px;display:inline-block;background:rgba(255,255,255,0.1);padding:4px 12px;border-radius:20px;font-size:12px">
+      <span class="pulse"></span> Shield Active — Standard Plan
+    </div>
+    <div class="policy-grid">
+      <div class="policy-stat"><div class="policy-stat-val" id="pol-premium">₹91</div><div class="policy-stat-lbl">This week</div></div>
+      <div class="policy-stat"><div class="policy-stat-val">₹900</div><div class="policy-stat-lbl">Max payout/day</div></div>
+      <div class="policy-stat"><div class="policy-stat-val">₹2,340</div><div class="policy-stat-lbl">Paid out total</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Dynamic Premium Breakdown</div>
+    <div class="card-sub">ML model recalculates every Monday based on hyper-local risk factors</div>
+    <div class="factor-row"><span>Base Standard Premium</span><span>₹99</span></div>
+    <div class="factor-row"><span>Zone flood risk (Low — Tambaram)</span><span class="factor-badge badge-good">−₹8</span></div>
+    <div class="factor-row"><span>Historical claim rate in zone</span><span class="factor-badge badge-good">−₹3</span></div>
+    <div class="factor-row"><span>Account tenure bonus (3 months)</span><span class="factor-badge badge-good">−₹4</span></div>
+    <div class="factor-row"><span>Predictive weather risk next 7 days</span><span class="factor-badge badge-warn">+₹7</span></div>
+    <div class="factor-row" style="border:none;font-weight:600;padding-top:10px"><span>Final Weekly Premium</span><span style="color:var(--orange)">₹91</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Behavioral Integrity Score</div>
+    <div class="card-sub">Your trust score determines claim processing speed</div>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:13px">BIS Score</span>
+      <span style="font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:var(--success)">84 / 100</span>
+    </div>
+    <div class="bis-bar"><div class="bis-fill" style="width:84%;background:var(--success)"></div></div>
+    <p style="font-size:12px;color:var(--muted)">Score &gt;70 → Auto-payout in &lt;60 min. Your claims are fast-tracked.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Manage Policy</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px">
+      <button class="btn btn-outline btn-sm" style="width:100%" onclick="showToast('Plan upgrade coming soon!')">Upgrade Plan</button>
+      <button class="btn btn-outline btn-sm" style="width:100%" onclick="showToast('Zone updated successfully')">Update Zone</button>
+      <button class="btn btn-outline btn-sm" style="width:100%" onclick="showToast('UPI details updated')">Update UPI</button>
+      <button class="btn btn-outline btn-sm" style="width:100%;color:var(--danger);border-color:var(--danger)" onclick="showToast('Shield paused for this week')">Pause Shield</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LIVE TRIGGERS ===== -->
+<div id="page-triggers" class="page">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+    <div>
+      <h2 style="font-size:20px;margin-bottom:2px">Live Zone Monitor</h2>
+      <p style="font-size:12px;color:var(--muted)">Chennai · Tambaram Zone · <span class="pulse"></span>Scanning every 60s</p>
+    </div>
+    <button class="btn btn-outline btn-sm" onclick="simulateTrigger()">Simulate Event</button>
+  </div>
+
+  <div class="trigger-grid">
+    <div class="trigger-card" id="trig-weather">
+      <div class="trigger-icon">🌧</div>
+      <div class="trigger-name">Extreme Weather</div>
+      <div style="font-size:12px;color:var(--muted)">OpenWeatherMap + IMD API</div>
+      <div style="font-size:13px;margin-top:8px" id="trig-weather-info">Temp: <strong>38°C</strong> · No active alert</div>
+      <div class="trigger-status status-watching" id="trig-weather-status"><span class="pulse"></span>Watching</div>
+    </div>
+    <div class="trigger-card" id="trig-app">
+      <div class="trigger-icon">📱</div>
+      <div class="trigger-name">App Server Health</div>
+      <div style="font-size:12px;color:var(--muted)">Platform Heartbeat Monitor</div>
+      <div style="font-size:13px;margin-top:8px" id="trig-app-info">Zomato: <strong style="color:var(--success)">UP</strong> · Swiggy: <strong style="color:var(--success)">UP</strong></div>
+      <div class="trigger-status status-clear" id="trig-app-status">All Clear</div>
+    </div>
+    <div class="trigger-card" id="trig-rally">
+      <div class="trigger-icon">🚧</div>
+      <div class="trigger-name">Rally / Bandh</div>
+      <div style="font-size:12px;color:var(--muted)">R.A.V.E. Engine · News + X API</div>
+      <div style="font-size:13px;margin-top:8px" id="trig-rally-info">No civic events detected</div>
+      <div class="trigger-status status-watching" id="trig-rally-status"><span class="pulse"></span>Watching</div>
+    </div>
+    <div class="trigger-card" id="trig-heat">
+      <div class="trigger-icon">🌡</div>
+      <div class="trigger-name">Extreme Heat</div>
+      <div style="font-size:12px;color:var(--muted)">IMD Heat Alert API</div>
+      <div style="font-size:13px;margin-top:8px" id="trig-heat-info">Threshold: &gt;42°C · Current: 38°C</div>
+      <div class="trigger-status status-clear" id="trig-heat-status">Below Threshold</div>
+    </div>
+    <div class="trigger-card" id="trig-flood">
+      <div class="trigger-icon">🌊</div>
+      <div class="trigger-name">Waterlogging Alert</div>
+      <div style="font-size:12px;color:var(--muted)">NDMA + IMD Zone API</div>
+      <div style="font-size:13px;margin-top:8px" id="trig-flood-info">No flood advisory active</div>
+      <div class="trigger-status status-clear" id="trig-flood-status">Clear</div>
+    </div>
+    <div class="trigger-card" id="trig-bis">
+      <div class="trigger-icon">🛡</div>
+      <div class="trigger-name">Anti-Spoof Guard</div>
+      <div style="font-size:12px;color:var(--muted)">BIS · GPS + Accel + Cell ID</div>
+      <div style="font-size:13px;margin-top:8px">BIS: <strong>84/100</strong> · No anomaly</div>
+      <div class="trigger-status status-clear">Clean</div>
+    </div>
+  </div>
+
+  <div id="trigger-alert" style="display:none;background:var(--orange-light);border:2px solid var(--orange);border-radius:12px;padding:20px;margin-top:8px">
+    <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--orange);margin-bottom:8px">⚡ Trigger Detected — Payout Initiated</div>
+    <div id="trigger-alert-msg" style="font-size:13px;color:var(--mid);margin-bottom:14px">Event confirmed across zone. Consensus validated. Payout processing.</div>
+    <div style="display:flex;gap:10px">
+      <div style="flex:1;background:#fff;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:11px;color:var(--muted)">Payout Amount</div>
+        <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--success)">₹340</div>
+      </div>
+      <div style="flex:1;background:#fff;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:11px;color:var(--muted)">ETA to UPI</div>
+        <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--orange)">38 min</div>
+      </div>
+      <div style="flex:1;background:#fff;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:11px;color:var(--muted)">BIS Check</div>
+        <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--success)">✓ Pass</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CLAIMS ===== -->
+<div id="page-claims" class="page">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+    <div>
+      <h2 style="font-size:20px;margin-bottom:2px">Claims</h2>
+      <p style="font-size:12px;color:var(--muted)">Zero-touch · Auto-triggered · UPI payout</p>
+    </div>
+    <button class="btn btn-sm" onclick="toggleSpecial()">+ Special Request</button>
+  </div>
+
+  <div class="card" style="background:var(--success-bg);border-color:var(--success)">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div style="font-size:12px;color:var(--success);font-weight:600">ZERO-TOUCH PROCESS</div>
+        <div style="font-size:13px;color:var(--mid);margin-top:4px">External event detected → BIS verified → UPI credited. No action needed from you.</div>
+      </div>
+      <div style="font-size:28px">⚡</div>
+    </div>
+  </div>
+
+  <div id="special-form" style="display:none">
+    <div class="card">
+      <div class="card-title">Special Request Portal</div>
+      <div class="card-sub">For rare events not auto-detected (bridge collapse, local emergency)</div>
+      <label>Event Description</label>
+      <input type="text" id="sp-event" placeholder="e.g. Bridge closure on GST Road"/>
+      <label>Estimated hours lost</label>
+      <input type="number" id="sp-hours" value="3" min="1" max="12"/>
+      <label>Supporting evidence (news link or photo)</label>
+      <input type="text" id="sp-link" placeholder="https://..."/>
+      <button class="btn" onclick="submitSpecial()">Submit for Human Review →</button>
+    </div>
+  </div>
+
+  <h3 style="font-size:13px;font-weight:600;margin-bottom:12px;color:var(--muted);letter-spacing:.05em">CLAIM HISTORY</h3>
+
+  <div class="claim-card">
+    <div>
+      <div class="claim-title">Heavy Rain — Tambaram Zone</div>
+      <div class="claim-meta">Apr 02, 2026 · 4.5 hrs · Auto-triggered</div>
+      <div style="font-size:11px;background:var(--success-bg);color:var(--success);padding:2px 8px;border-radius:4px;display:inline-block;margin-top:4px">Paid · 34 min</div>
+    </div>
+    <div><div class="claim-amount">₹340</div><div class="claim-status" style="color:var(--success)">UPI credited</div></div>
+  </div>
+
+  <div class="claim-card">
+    <div>
+      <div class="claim-title">Zomato Server Outage</div>
+      <div class="claim-meta">Mar 28, 2026 · 2 hrs · Auto-triggered</div>
+      <div style="font-size:11px;background:var(--success-bg);color:var(--success);padding:2px 8px;border-radius:4px;display:inline-block;margin-top:4px">Paid · 51 min</div>
+    </div>
+    <div><div class="claim-amount">₹180</div><div class="claim-status" style="color:var(--success)">UPI credited</div></div>
+  </div>
+
+  <div class="claim-card">
+    <div>
+      <div class="claim-title">Bandh — Partial Zone Block</div>
+      <div class="claim-meta">Mar 21, 2026 · 6 hrs · R.A.V.E. verified</div>
+      <div style="font-size:11px;background:var(--warn-bg);color:var(--warn);padding:2px 8px;border-radius:4px;display:inline-block;margin-top:4px">Soft Hold → Paid · 88 min</div>
+    </div>
+    <div><div class="claim-amount">₹420</div><div class="claim-status" style="color:var(--success)">UPI credited</div></div>
+  </div>
+
+  <div class="claim-card">
+    <div>
+      <div class="claim-title">Special Request — Road Flooding</div>
+      <div class="claim-meta">Mar 15, 2026 · 3 hrs · Human verified</div>
+      <div style="font-size:11px;background:var(--success-bg);color:var(--success);padding:2px 8px;border-radius:4px;display:inline-block;margin-top:4px">Paid · 3.5 hrs</div>
+    </div>
+    <div><div class="claim-amount">₹270</div><div class="claim-status" style="color:var(--success)">UPI credited</div></div>
+  </div>
+
+  <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:8px">
+    <div style="font-size:13px;font-weight:600;margin-bottom:10px">Payout Timeline</div>
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);padding:6px 0;border-bottom:1px solid var(--border)"><span>Event Detected</span><span>0 min</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);padding:6px 0;border-bottom:1px solid var(--border)"><span>BIS Score Verified</span><span>~3 min</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);padding:6px 0;border-bottom:1px solid var(--border)"><span>Payout Calculated</span><span>~5 min</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--success);padding:6px 0"><span>UPI Credited ⚡</span><span>&lt;60 min</span></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  var selectedTierPrice = 99;
+  var zoneDiscount = 8;
+  var simCount = 0;
+
+  var triggerScenarios = [
+    {
+      id: 'weather',
+      info: 'Temp: <strong style="color:var(--danger)">44°C</strong> · <strong style="color:var(--danger)">IMD RED ALERT active</strong>',
+      msg: 'Heavy rain red alert confirmed across Tambaram zone. 47 workers affected. OpenWeatherMap + IMD consensus validated.'
+    },
+    {
+      id: 'rally',
+      info: '<strong style="color:var(--danger)">Bandh detected in zone</strong> · R.A.V.E. confidence: 0.82',
+      msg: 'Bandh verified via Google News + Twitter/X trend spike. Zone-level disruption confirmed. Payout initiated for all active subscribers.'
+    },
+    {
+      id: 'app',
+      info: 'Zomato: <strong style="color:var(--danger)">DOWN</strong> · Swiggy: <strong style="color:var(--success)">UP</strong>',
+      msg: 'Zomato platform outage detected via heartbeat monitor + social listener. Community-level event confirmed. Batch UPI payout triggered.'
+    },
+    {
+      id: 'heat',
+      info: 'Temp: <strong style="color:var(--danger)">43°C</strong> · <strong>IMD Heat Alert Active</strong>',
+      msg: 'Extreme heat threshold exceeded (43°C > 42°C). IMD alert active in zone. Payout calculated based on disruption hours.'
+    },
+    {
+      id: 'flood',
+      info: '<strong style="color:var(--danger)">NDMA Flood Advisory Active</strong> · Zone B3 affected',
+      msg: 'Waterlogging advisory confirmed by NDMA + IMD. Zone B3 (Tambaram) declared disrupted. Auto-payout initiated.'
+    }
+  ];
+
+  function showPage(p, el) {
+    document.querySelectorAll('.page').forEach(function(pg){ pg.classList.remove('active'); });
+    document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+    document.getElementById('page-' + p).classList.add('active');
+    if(el) el.classList.add('active');
+    if(p === 'policy') updatePolicyFromReg();
+  }
+
+  function showToast(msg) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(function(){ t.classList.remove('show'); }, 2800);
+  }
+
+  function regStep2() {
+    var name = document.getElementById('reg-name').value.trim();
+    var pid = document.getElementById('reg-pid').value.trim();
+    var phone = document.getElementById('reg-phone').value.trim();
+    if (!name || !pid || !phone) { showToast('Please fill all fields'); return; }
+    document.getElementById('reg-step1').style.display = 'none';
+    document.getElementById('reg-step2').style.display = 'block';
+  }
+
+  function updateZoneRisk() {
+    var zone = document.getElementById('reg-zone').value;
+    var card = document.getElementById('zone-risk-card');
+    if (zone === 'high') {
+      zoneDiscount = -5;
+      card.style.background = 'var(--danger-bg)'; card.style.color = 'var(--danger)';
+      card.innerHTML = '⚠ Zone risk: <strong>High</strong> — Flood-prone area adds ₹5/week to premium';
+    } else if (zone === 'med') {
+      zoneDiscount = 2;
+      card.style.background = 'var(--warn-bg)'; card.style.color = 'var(--warn)';
+      card.innerHTML = '~ Zone risk: <strong>Medium</strong> — You qualify for ₹2/week discount';
+    } else {
+      zoneDiscount = 8;
+      card.style.background = 'var(--success-bg)'; card.style.color = 'var(--success)';
+      card.innerHTML = '✓ Zone risk: <strong>Low</strong> — You qualify for ₹8/week discount';
+    }
+  }
+
+  function regStep3() {
+    document.getElementById('reg-step2').style.display = 'none';
+    document.getElementById('reg-step3').style.display = 'block';
+    updateTierPrices();
+  }
+
+  function updateTierPrices() {
+    var bases = { eco: 49, std: 99, elite: 199 };
+    Object.keys(bases).forEach(function(id) {
+      var final = Math.max(bases[id] - zoneDiscount, bases[id] - 20);
+      document.getElementById('price-' + id).textContent = '₹' + final;
+    });
+    var finalStd = Math.max(99 - zoneDiscount, 79);
+    document.getElementById('ai-pricing-note').innerHTML =
+      '🤖 <strong>AI Pricing Active:</strong> Zone discount applied. Standard: ₹99 → <strong>₹' + finalStd + '/week</strong>';
+  }
+
+  function regStep4() {
+    if (!document.getElementById('agree-check').checked) {
+      showToast('Please accept the Smart Contract to continue'); return;
+    }
+    document.getElementById('reg-step3').style.display = 'none';
+    document.getElementById('reg-step4').style.display = 'block';
+    updateTierPrices();
+  }
+
+  function selectTier(el, id, price) {
+    document.querySelectorAll('.tier').forEach(function(t){ t.classList.remove('selected'); });
+    el.classList.add('selected');
+    selectedTierPrice = price;
+  }
+
+  function completeReg() {
+    showToast('Shield activated! Welcome to GigShield. ⚡');
+    setTimeout(function(){
+      document.querySelectorAll('.tab')[1].click();
+    }, 1400);
+  }
+
+  function updatePolicyFromReg() {
+    var name = document.getElementById('reg-name').value.trim();
+    if (name) document.getElementById('pol-name').textContent = name;
+    var finalP = Math.max(selectedTierPrice - zoneDiscount, selectedTierPrice - 20);
+    document.getElementById('pol-premium').textContent = '₹' + finalP;
+  }
+
+  function simulateTrigger() {
+    var scenario = triggerScenarios[simCount % triggerScenarios.length];
+    simCount++;
+    var card = document.getElementById('trig-' + scenario.id);
+    var infoEl = document.getElementById('trig-' + scenario.id + '-info');
+    var statusEl = document.getElementById('trig-' + scenario.id + '-status');
+    card.classList.add('triggered');
+    if (infoEl) infoEl.innerHTML = scenario.info;
+    if (statusEl) { statusEl.textContent = 'TRIGGERED'; statusEl.className = 'trigger-status status-triggered'; }
+    document.getElementById('trigger-alert-msg').textContent = scenario.msg;
+    document.getElementById('trigger-alert').style.display = 'block';
+    showToast('⚡ Trigger fired! UPI payout processing...');
+    setTimeout(function(){
+      card.classList.remove('triggered');
+      if (statusEl) { statusEl.innerHTML = '<span class="pulse"></span>Watching'; statusEl.className = 'trigger-status status-watching'; }
+      document.getElementById('trigger-alert').style.display = 'none';
+    }, 9000);
+  }
+
+  function toggleSpecial() {
+    var f = document.getElementById('special-form');
+    f.style.display = f.style.display === 'none' ? 'block' : 'none';
+  }
+
+  function submitSpecial() {
+    var ev = document.getElementById('sp-event').value.trim();
+    if (!ev) { showToast('Please describe the event'); return; }
+    document.getElementById('special-form').style.display = 'none';
+    showToast('Submitted. Human review within 4 hours.');
+  }
+</script>
+</body>
+</html>
